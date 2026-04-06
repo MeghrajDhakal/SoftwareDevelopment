@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering Exam Notes (Rajib Mall)</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Mermaid.js for Diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'dark',
+            securityLevel: 'loose',
+            fontFamily: 'Inter'
+        });
+    </script>
+    <style>
+        :root {
+            --bg: #0f111a;
+            --surface: #1e2130;
+            --surface-hover: #2a2d3e;
+            --primary: #6c5ce7;
+            --primary-glow: rgba(108, 92, 231, 0.4);
+            --accent: #00cec9;
+            --text-main: #f1f2f6;
+            --text-muted: #a4b0be;
+            --border: #2f3542;
+            --success: #00b894;
+            --warning: #fdcb6e;
+            --danger: #ff7675;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 1rem;
+            z-index: 10;
+        }
+
+        .brand {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-item {
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-item:hover {
+            background: var(--surface-hover);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 3rem;
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography & Layout inside content */
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--accent);
+            margin: 2.5rem 0 1rem 0;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        p {
+            margin-bottom: 1.2rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        ul, ol {
+            margin: 1rem 0 1.5rem 2rem;
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Definition Cards */
+        .def-card {
+            background: rgba(108, 92, 231, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .def-card h4 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: var(--surface);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--surface-hover);
+        }
+
+        /* Diagrams */
+        .diagram-container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+
+        .diagram-container:hover {
+            transform: scale(1.02);
+        }
+
+        .diagram-caption {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Exam callout boxes */
+        .exam-box {
+            background: rgba(253, 203, 110, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .exam-box::before {
+            content: '⭐ EXAM HIGHLIGHT';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--warning);
+            color: var(--bg);
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 800;
+        }
+
+        /* Action Buttons */
+        .actions {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #5544c2;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">SE Exam Notes<br><span style="font-size: 0.8rem; color: #a4b0be; letter-spacing: normal;">Rajib Mall 5th Ed.</span></div>
+        <div class="nav-item active" onclick="switchTab('ui')">🖥️ UI Design (Ch 9)</div>
+        <div class="nav-item" onclick="switchTab('dfd')">⚙️ DFD / SA-SD (Ch 6)</div>
+        <div class="nav-item" onclick="switchTab('uml')">📦 OOD & UML (Ch 7)</div>
+        <div class="nav-item" onclick="switchTab('tables')">📊 Comp. Tables</div>
+        <div class="nav-item" onclick="switchTab('exam')">🎯 Exam Questions</div>
+        
+        <div class="actions">
+            <a href="Software_Engineering_Notes.doc" download class="btn" style="background: var(--success); margin-top:20px;">⬇️ Download DOC</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+
+        <!-- ==========================================
+             CHAPTER 9: USER INTERFACE DESIGN
+        =========================================== -->
+        <div id="ui" class="section active">
+            <h1>User Interface Design (Chapter 9)</h1>
+            <p>Based entirely on Rajib Mall's Fundamentals of Software Engineering.</p>
+
+            <h2>1. Basics of UI & Characteristics</h2>
+            
+            <div class="def-card">
+                <h4>✅ Definition</h4>
+                <p>The User Interface (UI) is the mechanism through which users interact with a system, provide input, and interpret the system's output. A poorly designed UI can cause a flawlessly engineered backend to fail in the market.</p>
+            </div>
+
+            <h3>Characteristics of a Good UI:</h3>
+            <ul>
+                <li><strong>Speed of Learning:</strong> How fast a novice user can learn to use the system.</li>
+                <li><strong>Speed of Use:</strong> How fast an experienced user can accomplish tasks.</li>
+                <li><strong>Speed of Recall:</strong> How easily a user remembers how to use the system after a period of non-use.</li>
+                <li><strong>Error Avoidance:</strong> System should guide users to prevent errors.</li>
+                <li><strong>Attractiveness & Consistency:</strong> Visual appeal and identical behavior for identical actions.</li>
+                <li><strong>Feedback:</strong> System should immediately acknowledge user actions (e.g., loading spinner).</li>
+            </ul>
+
+            <h2>2. Help System & Interface Types</h2>
+            <p><strong>Help Systems:</strong> Crucial for guiding users. Types include Context-sensitive help (pop-up on hover), Reference Manuals, and Interactive Tutorials.</p>
+
+            <h3>Types of Interfaces:</h3>
+            <ul>
+                <li><strong>Text-Based User Interface (Command Line):</strong> Users explicitly type commands. Requires high learning curve but fast for experts.</li>
+                <li><strong>Graphical User Interface (GUI):</strong> Visual interaction using icons, windows, menus, and pointers.</li>
+            </ul>
+
+            <div class="def-card">
+                <h4>Mode vs Modeless Interface</h4>
+                <p><strong>Mode-based:</strong> The same keystroke means different things depending on the system "mode" (e.g., vi editor: Insert mode vs Command mode).<br>
+                <strong>Modeless:</strong> The keystrokes have the same meaning regardless of the state. GUIs are predominantly modeless.</p>
+            </div>
+
+            <h2>3. Menu Types</h2>
+            <ul>
+                <li><strong>Pull-down Menu:</strong> Drops down from a top menu bar.</li>
+                <li><strong>Pop-up Menu:</strong> Appears at the cursor location on right-click.</li>
+                <li><strong>Cascading Menu:</strong> A menu item opens a sub-menu to the side.</li>
+                <li><strong>Scroll-bar Menu:</strong> Useful when options exceed screen space.</li>
+            </ul>
+
+            <h2>4. GUI Development & Window Systems</h2>
+            <p>GUI development uses specialized libraries known as Window Systems (or toolkits). A Window system divides the screen into rectangular areas (windows) and multiplexes the physical screen, keyboard, and mouse.</p>
+            
+            <h3>Widgets</h3>
+            <p>Widgets are reusable, standard GUI components such as Push Buttons, Radio Buttons, Checkboxes, Text Bars, and Scroll bars.</p>
+
+            <h3>Window System Architecture (X-Window)</h3>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    graph TD
+                        subgraph Client Machines
+                            C1[Client 1 Application]
+                            C2[Client 2 Application]
+                        end
+                        Network[Network Communication / X-Protocol]
+                        subgraph Server Machine / User Workstation
+                            XS[X-Server]
+                            HW[Display / Keyboard / Mouse]
+                        end
+                        C1 --> Network
+                        C2 --> Network
+                        Network --> XS
+                        XS --> HW
+                </div>
+                <div class="diagram-caption">Fig 1: X-Window System Architecture (Ref: Page 413)</div>
+            </div>
+            <p><strong>Explanation:</strong> The X-Window System uses an inverted Client-Server architecture. The "Server" manages the display (keyboard, screen, mouse) directly at the user's desk, while "Clients" are actual application programs that can run on remote machines. They communicate over a network using the X-Protocol.</p>
+
+            <h2>5. UI Design Methodology & Human Factors</h2>
+            <p>Methodology steps: 1. Task Analysis (understanding what tasks user performs), 2. Designing the interface layout, 3. Implementing the design, 4. Testing.</p>
+            <div class="exam-box">
+                <h4>Human Cognitive Factors (Crucial for Design)</h4>
+                <ul>
+                    <li><strong>Short-Term Memory:</strong> George Miller’s rule (7 ± 2 principle) states that humans can only hold 5 to 9 chunks of information in short-term memory. Menus shouldn't have more than 9 items.</li>
+                    <li><strong>Error Handling:</strong> Design should account for human error—prevent fatal mistakes before execution (e.g., "Are you sure?").</li>
+                    <li><strong>Visual characteristics:</strong> Account for color blindness; don't rely purely on red/green combinations to convey distinct states.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             CHAPTER 6: DFD & SA-SD
+        =========================================== -->
+        <div id="dfd" class="section">
+            <h1>DFD & SA-SD Methodology (Chapter 6)</h1>
+            <p>Based entirely on Rajib Mall's Fundamentals of Software Engineering.</p>
+
+            <h2>1. Function-Oriented Design & SA/SD</h2>
+            <div class="def-card">
+                <h4>✅ Structured Analysis and Structured Design (SA/SD)</h4>
+                <p>Function-oriented design focuses on dividing the system into interacting functions. <strong>SA/SD Methodology</strong> uses a top-down transformation technique.</p>
+                <ul>
+                    <li><strong>Structured Analysis (SA):</strong> Transforms user requirements into a logical model. Focuses on <em>what</em> the system should do. (Outputs: DFD, Data Dictionary).</li>
+                    <li><strong>Structured Design (SD):</strong> Transforms the logical model into a physical architecture implementation model. Focuses on <em>how</em> to build it. (Outputs: Structure Chart).</li>
+                </ul>
+            </div>
+
+            <h2>2. Data Flow Diagrams (DFD)</h2>
+            <p><strong>Definition:</strong> A DFD (also known as a Bubble Chart) is a graphical technique to represent the flow of data through a system. It shows how processes transform input data into output data.</p>
+            
+            <h3>Characteristics:</h3>
+            <ul>
+                <li>Simplistic: Very few graphical symbols.</li>
+                <li>Hierarchical: Built in layers (Level 0, 1, 2) allowing abstraction.</li>
+                <li>Lacks control flow (no "loops" or "if-else" conditions).</li>
+            </ul>
+
+            <h3>DFD Symbols (DeMarco & Yourdon / Gane & Sarson):</h3>
+            <ul>
+                <li><strong>Process (Circle / Bubble):</strong> Represents a function or transformation.</li>
+                <li><strong>External Entity (Rectangle):</strong> Source or destination of data. Ex: Customer, Admin.</li>
+                <li><strong>Data Store (Two parallel lines / Open rectangle):</strong> Repository of data (database/file).</li>
+                <li><strong>Data Flow (Arrow):</strong> Shows the direction data travels.</li>
+            </ul>
+
+            <h2>3. DFD Examples (Library System)</h2>
+            
+            <h3>Context Diagram (Level 0)</h3>
+            <p>Represents the entire software system as a single process bubble interacting with external entities. Establishes the system boundary.</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart LR
+                        Mem[Member] -->|Book Details| P0((0. Library Management System))
+                        P0 -->|Issued Book / Fine| Mem
+                        Admin[Librarian] -->|Update Database| P0
+                        P0 -->|Reports| Admin
+                </div>
+                <div class="diagram-caption">Fig 2: Level 0 (Context) DFD for Library System</div>
+            </div>
+
+            <h3>Level 1 DFD</h3>
+            <p>Decomposition of the single bubble from Level 0 into major functional processes.</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart TD
+                        Mem[Member] -->|Book Info| P1((1. Issue Book))
+                        Mem -->|Return Details| P2((2. Return Book))
+                        Admin[Librarian] -->|Update| P3((3. Manage Catalog))
+                        
+                        DS1[(D1: Book Database)]
+                        DS2[(D2: Member DB)]
+
+                        P1 <--> DS1
+                        P1 <--> DS2
+                        P2 <--> DS1
+                        P2 <--> DS2
+                        P3 <--> DS1
+                </div>
+                <div class="diagram-caption">Fig 3: Level 1 DFD Decomposition</div>
+            </div>
+
+            <h3>Level 2 DFD</h3>
+            <p>Exploding a specific process from Level 1 (e.g., Process 1. Issue Book). (Ref: Page 254-260)</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    flowchart LR
+                        Input[Member Details] --> P1_1((1.1 Validate Member))
+                        P1_1 -->|Valid Member ID| P1_2((1.2 Check Book Availability))
+                        P1_2 -->|Available| P1_3((1.3 Update Logs & Issue))
+                        P1_3 --> Output[Issue Receipt]
+                </div>
+                <div class="diagram-caption">Fig 4: Level 2 DFD (Decomposition of "Issue Book")</div>
+            </div>
+
+            <div class="exam-box">
+                <h4>Data Dictionary</h4>
+                <p>Crucial component of SA. It is a repository that stores descriptions of all data objects, relationships, and data types found in the DFD. It ensures consistency across the project.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             CHAPTER 7: OOD & UML
+        =========================================== -->
+        <div id="uml" class="section">
+            <h1>Object-Oriented Design & UML (Chapter 7)</h1>
+            <p>Based entirely on Rajib Mall's Fundamentals of Software Engineering.</p>
+
+            <h2>1. OOP Concepts & OOD Advantages</h2>
+            <div class="def-card">
+                <h4>✅ Core Concepts</h4>
+                <p><strong>Encapsulation:</strong> Wrapping data and methods into a single unit (Class).<br>
+                <strong>Abstraction:</strong> Hiding internal implementation details.<br>
+                <strong>Inheritance:</strong> Mechanism for one class to acquire properties of another.<br>
+                <strong>Polymorphism:</strong> Same interface, different underlying implementations.</p>
+            </div>
+            
+            <h3>Advantages of OOD:</h3>
+            <ul>
+                <li>High reusability of software components.</li>
+                <li>Reduces development time and cost.</li>
+                <li>Maps directly onto real-world entities (easier to model).</li>
+                <li>Improves maintainability.</li>
+            </ul>
+
+            <h2>2. UML Basics & Views</h2>
+            <p><strong>UML (Unified Modeling Language):</strong> A standardized graphical language used for modeling OOD software. UML supports various 'views' of a system:</p>
+            <ul>
+                <li><strong>User's View:</strong> Use Case Diagram.</li>
+                <li><strong>Structural View:</strong> Class & Object Diagrams.</li>
+                <li><strong>Behavioral View:</strong> Sequence, Collaboration, Activity, State-chart diagrams.</li>
+                <li><strong>Implementation/Environment View:</strong> Component & Deployment Diagrams.</li>
+            </ul>
+
+            <h2>3. UML Diagrams (Detailed & Modeled)</h2>
+
+            <h3>1. Use Case Diagram</h3>
+            <p>Captures system functionality from a user's perspective. It involves Actors (stick figures) and Use Cases (ellipses).</p>
+            <p><strong>Relationships:</strong><br>
+            <code>&lt;&lt;include&gt;&gt;</code>: Base case explicitly incorporates behavior of another case.<br>
+            <code>&lt;&lt;extend&gt;&gt;</code>: Base case implicitly incorporates behavior under absolute conditions.</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    usecaseDiagram
+                        actor Student
+                        actor Librarian
+                        usecase "Search Book" as UC1
+                        usecase "Issue Book" as UC2
+                        usecase "Verify Fine" as UC3
+                        
+                        Student --> UC1
+                        Student --> UC2
+                        Librarian --> UC2
+                        UC2 ..> UC3 : <<include>>
+                </div>
+                <div class="diagram-caption">Fig 5: Use Case Diagram for Library</div>
+            </div>
+
+            <h3>2. Class Diagram</h3>
+            <p>Shows static structure of the system: classes, attributes, methods, and relationships. It uses rectangles divided into three tiers (Name, Attributes, Methods).</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    classDiagram
+                        class Library {
+                            +String name
+                            +addBook()
+                        }
+                        class Book {
+                            -String ISBN
+                            -String title
+                            +getDetails()
+                        }
+                        class Member {
+                            #int id
+                            +borrowBook()
+                        }
+                        Library "1" *-- "*" Book : Composition
+                        Member "1" -- "*" Book : Borrows
+                </div>
+                <div class="diagram-caption">Fig 6: Class Diagram</div>
+            </div>
+
+            <h3>3. Sequence Diagram</h3>
+            <p>Displays object interactions arranged in time sequence. Uses vertical dashed lines (lifelines) and horizontal arrows (messages).</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    sequenceDiagram
+                        actor User
+                        participant ATM
+                        participant Bank
+                        
+                        User->>ATM: Insert Card
+                        ATM->>Bank: Verify Card
+                        Bank-->>ATM: Card OK
+                        ATM->>User: Ask PIN
+                </div>
+                <div class="diagram-caption">Fig 7: Sequence Diagram Example</div>
+            </div>
+
+            <h3>4. Activity & State Chart Diagrams</h3>
+            <p><strong>Activity:</strong> Similar to a flowchart, displays the flow from activity to activity.<br>
+            <strong>State Chart:</strong> Shows the sequence of states an object goes through during its lifetime in response to events.</p>
+            <div class="diagram-container">
+                <div class="mermaid">
+                    stateDiagram-v2
+                        [*] --> Available
+                        Available --> Issued : borrow()
+                        Issued --> Available : return()
+                        Issued --> Lost : reportLost()
+                        Lost --> [*]
+                </div>
+                <div class="diagram-caption">Fig 8: State Chart Diagram for a Book Object</div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+             COMPARISON TABLES
+        =========================================== -->
+        <div id="tables" class="section">
+            <h1>Comparison Tables (Exam Gold)</h1>
+
+            <h2>GUI vs Text-Based UI</h2>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>GUI (Graphical User Interface)</th>
+                    <th>Text-Based UI (Command Line)</th>
+                </tr>
+                <tr>
+                    <td>Ease of learning</td>
+                    <td>High (Very easy for beginners)</td>
+                    <td>Low (Requires memorizing commands)</td>
+                </tr>
+                <tr>
+                    <td>Speed of execution</td>
+                    <td>Moderate (Navigating menus takes time)</td>
+                    <td>High (Fast for expert users)</td>
+                </tr>
+                <tr>
+                    <td>Resource consumption</td>
+                    <td>High (Needs GPU, RAM, Window System)</td>
+                    <td>Very Low</td>
+                </tr>
+                <tr>
+                    <td>Error probability</td>
+                    <td>Low (Constrained choices)</td>
+                    <td>High (Syntax errors)</td>
+                </tr>
+            </table>
+
+            <h2>SA vs SD (Structured Analysis vs Design)</h2>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Structured Analysis (SA)</th>
+                    <th>Structured Design (SD)</th>
+                </tr>
+                <tr>
+                    <td>Objective</td>
+                    <td>Focuses on 'What' the system must do</td>
+                    <td>Focuses on 'How' to build the system</td>
+                </tr>
+                <tr>
+                    <td>Primary Output</td>
+                    <td>DFD & Data Dictionary</td>
+                    <td>Structure Chart</td>
+                </tr>
+                <tr>
+                    <td>Phase</td>
+                    <td>Requirements Analysis Model</td>
+                    <td>Implementation Model</td>
+                </tr>
+            </table>
+
+            <h2>OOD Relationships: Association vs Aggregation vs Composition</h2>
+            <table>
+                <tr>
+                    <th>Relationship</th>
+                    <th>Definition</th>
+                    <th>Strength</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>Association</td>
+                    <td>A structural relationship stating objects are linked. (A uses B)</td>
+                    <td>Weak</td>
+                    <td>Teacher and Student</td>
+                </tr>
+                <tr>
+                    <td>Aggregation</td>
+                    <td>A "part-whole" relationship. Part can exist without whole.</td>
+                    <td>Moderate</td>
+                    <td>Department and Professor</td>
+                </tr>
+                <tr>
+                    <td>Composition</td>
+                    <td>A strong "part-whole". Part dies if whole is destroyed.</td>
+                    <td>Strong</td>
+                    <td>House and Room</td>
+                </tr>
+            </table>
+
+            <h2>Mode vs Modeless Interface</h2>
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Mode-based</th>
+                    <th>Modeless</th>
+                </tr>
+                <tr>
+                    <td>Definition</td>
+                    <td>State changes interpretation of inputs</td>
+                    <td>Input meaning is consistent everywhere</td>
+                </tr>
+                <tr>
+                    <td>Example</td>
+                    <td>Vi Editor (Insert vs Command mode)</td>
+                    <td>Windows OS / Web Browsers</td>
+                </tr>
+                <tr>
+                    <td>User Preference</td>
+                    <td>Confusing for novices</td>
+                    <td>Highly preferred, less prone to errors</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ==========================================
+             EXAM QUESTIONS
+        =========================================== -->
+        <div id="exam" class="section">
+            <h1>Extra Exam Content</h1>
+
+            <h2>Short Notes (2–5 Marks)</h2>
+            <div class="def-card">
+                <h4>1. What is X-Window System?</h4>
+                <p>It is a standard windowing system for UNIX networks based on a client-server architecture. Uniquely, the X-server runs on the user's local terminal managing display output, while X-clients are application logic programs that run on remote backend servers.</p>
+            </div>
+            
+            <div class="def-card">
+                <h4>2. Differentiate between `<<include>>` and `<<extend>>`.</h4>
+                <p>`<<include>>` represents mandatory relationships where the base use case requires the included case to complete (e.g., Checkout includes Payment). `<<extend>>` represents optional behavior executed under specific conditions (e.g., Checkout extends Apply Discount).</p>
+            </div>
+
+            <div class="def-card">
+                <h4>3. What is a Context Diagram?</h4>
+                <p>Also known as Level 0 DFD, it represents the entire software system as a single process bubble, helping to identify the external entities and the system boundary without diving into internal data flows.</p>
+            </div>
+
+            <h2>Long Answer Questions (10 Marks)</h2>
+            <div class="exam-box">
+                <h4>Q1. Explain the characteristics and principles of a Good User Interface design according to Rajib Mall.</h4>
+                <ol>
+                    <li><strong>Define UI (2 marks):</strong> The boundary of communication between user and system.</li>
+                    <li><strong>Characteristics (6 marks):</strong> Describe Speed of Learning, Speed of Use, Recall speed. Emphasize George Miller's 7±2 principle for short-term memory constraints. Mention consistency, aesthetic appeal, and immediate feedback.</li>
+                    <li><strong>Error Handling (2 marks):</strong> Describe how good UI prevents errors using constraints and provides clear recovery mechanisms.</li>
+                </ol>
+            </div>
+
+            <div class="exam-box">
+                <h4>Q2. Draw a Level 0, 1, and 2 DFD for a Library Management System. Explain the symbols used.</h4>
+                <ol>
+                    <li><strong>Symbols (2 marks):</strong> Explain DeMarco & Yourdon symbols (Bubble = process, Rectangle = entity, Open Rect = Store, Arrow = flow).</li>
+                    <li><strong>Level 0 (2.5 marks):</strong> Draw 1 bubble "Library System" surrounded by Member and Admin entities.</li>
+                    <li><strong>Level 1 (2.5 marks):</strong> Expand to "Issue Book", "Return Book", "Manage Members". Show Data stores D1 and D2.</li>
+                    <li><strong>Level 2 (3 marks):</strong> Expand "Issue Book" to validate membership, check availability, and update logs.</li>
+                </ol>
+            </div>
+
+            <h2>Important Keywords (Viva Prep)</h2>
+            <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <li><strong>Widgets:</strong> Standard GUI elements.</li>
+                <li><strong>George Miller's Rule:</strong> 7±2 memory slots.</li>
+                <li><strong>Polymorphism:</strong> Same interface, many forms.</li>
+                <li><strong>DFD Bubble:</strong> Represents a process.</li>
+                <li><strong>Lifeline:</strong> Dashed line in Sequence charts.</li>
+                <li><strong>Top-down approach:</strong> SA/SD design philosophy.</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding section
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+            
+            // Render Mermaid diagrams explicitly if they were hidden
+            window.dispatchEvent(new Event('resize'));
+        }
+    </script>
+</body>
+</html>
